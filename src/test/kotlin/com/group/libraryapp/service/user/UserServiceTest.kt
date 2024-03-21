@@ -40,10 +40,10 @@ class UserServiceTest @Autowired constructor(
     @Test
     fun getUsersTest() {
         // given
-         userRepository.saveAll(listOf(
-             User("A", 20),
-             User("B", null),
-         ))
+        userRepository.saveAll(listOf(
+            User("A", 20),
+            User("B", null),
+        ))
 
         // when
         val results = userService.getUsers()
