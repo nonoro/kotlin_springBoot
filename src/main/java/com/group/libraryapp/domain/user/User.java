@@ -1,7 +1,7 @@
 package com.group.libraryapp.domain.user;
 
 import com.group.libraryapp.domain.book.Book;
-import com.group.libraryapp.domain.user.loanhistory.UserLoanHistory;
+import com.group.libraryapp.domain.user.loanhistory.javaUserLoanHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +24,7 @@ public class User {
   private Integer age;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  private final List<UserLoanHistory> userLoanHistories = new ArrayList<>();
+  private final List<javaUserLoanHistory> userLoanHistories = new ArrayList<>();
 
   public User() {
 
@@ -43,11 +43,11 @@ public class User {
   }
 
   public void loanBook(Book book) {
-    this.userLoanHistories.add(new UserLoanHistory(this, book.getName(), false));
+    this.userLoanHistories.add(new javaUserLoanHistory(this, book.getName(), false));
   }
 
   public void returnBook(String bookName) {
-    UserLoanHistory targetHistory = this.userLoanHistories.stream()
+    javaUserLoanHistory targetHistory = this.userLoanHistories.stream()
         .filter(history -> history.getBookName().equals(bookName))
         .findFirst()
         .orElseThrow();
