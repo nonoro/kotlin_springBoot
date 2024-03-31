@@ -46,7 +46,7 @@ class JavaUserServiceTest @Autowired constructor(
         ))
 
         // when
-        val results = userService.getUser()
+        val results = userService.getUsers()
 
         // then
         assertThat(results).hasSize(2)
