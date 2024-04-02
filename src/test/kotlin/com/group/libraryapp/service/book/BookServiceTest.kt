@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class JavaBookServiceTest @Autowired constructor(
+class BookServiceTest @Autowired constructor(
     private val bookService: BookService,
     private val bookRepository: BookRepository,
     private val userRepository: UserRepository,
@@ -34,7 +34,7 @@ class JavaBookServiceTest @Autowired constructor(
     @Test
     fun saveBookTest() {
         // given
-        val request = BookRequest("이상한 나라의 엘리스")
+        val request = BookRequest("이상한 나라의 엘리스", "COMPUTER")
 
         // when
         bookService.saveBook(request)
@@ -43,13 +43,14 @@ class JavaBookServiceTest @Autowired constructor(
         val books = bookRepository.findAll()
         assertThat(books).hasSize(1)
         assertThat(books[0].name).isEqualTo("이상한 나라의 엘리스")
+        assertThat(books[0].type).isEqualTo("COMPUTER")
     }
 
     @DisplayName("책 대출이 정상 동작한다")
     @Test
     fun loanBookTest() {
         // given
-        bookRepository.save(Book("이상한 나라의 엘리스"))
+        bookRepository.save(Book.fixture("이상한 나라의 엘리스"))
         val savedUser = userRepository.save(User("권규정", null))
         val request = BookLoanRequest("권규정", "이상한 나라의 엘리스")
 
@@ -68,7 +69,7 @@ class JavaBookServiceTest @Autowired constructor(
     @Test
     fun loanBookFailTest() {
         // given
-        bookRepository.save(Book("이상한 나라의 엘리스", null))
+        bookRepository.save(Book.fixture("이상한 나라의 엘리스"))
         val savedUser = userRepository.save(User("권규정", null))
         userLoanHistoryRepository.save(
             UserLoanHistory(
