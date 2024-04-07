@@ -23,8 +23,10 @@ class UserServiceTest @Autowired constructor(
 
     @AfterEach
     fun clean() {
+        println("CLEAN 시작")
         userRepository.deleteAll()
     }
+
     @DisplayName("유저 저장이 정상 동작한다")
     @Test
     fun saveUserTest() {
@@ -40,14 +42,17 @@ class UserServiceTest @Autowired constructor(
         assertThat(results[0].name).isEqualTo("권규정")
         assertThat(results[0].age).isNull()
     }
+
     @DisplayName("유저 조회가 정상 동작한다")
     @Test
     fun getUsersTest() {
         // given
-        userRepository.saveAll(listOf(
-            User("A", 20),
-            User("B", null),
-        ))
+        userRepository.saveAll(
+            listOf(
+                User("A", 20),
+                User("B", null),
+            )
+        )
 
         // when
         val results = userService.getUsers()
@@ -106,11 +111,13 @@ class UserServiceTest @Autowired constructor(
     fun getUserLoanHistoriesTest2() {
         // given
         val savedUser = userRepository.save(User("A", null))
-        userLoanHistoryRepository.saveAll(listOf(
-            UserLoanHistory.fixture(savedUser, "책1", UserLoanStatus.LOANED),
-            UserLoanHistory.fixture(savedUser, "책2", UserLoanStatus.LOANED),
-            UserLoanHistory.fixture(savedUser, "책3", UserLoanStatus.RETURNED),
-        ))
+        userLoanHistoryRepository.saveAll(
+            listOf(
+                UserLoanHistory.fixture(savedUser, "책1", UserLoanStatus.LOANED),
+                UserLoanHistory.fixture(savedUser, "책2", UserLoanStatus.LOANED),
+                UserLoanHistory.fixture(savedUser, "책3", UserLoanStatus.RETURNED),
+            )
+        )
         // when
         val results = userService.getUserLoanHistories()
 
@@ -122,6 +129,5 @@ class UserServiceTest @Autowired constructor(
             .containsExactlyInAnyOrder("책1", "책2", "책3")
         assertThat(results[0].books).extracting("isReturn")
             .containsExactlyInAnyOrder(false, false, true)
-
     }
 }
